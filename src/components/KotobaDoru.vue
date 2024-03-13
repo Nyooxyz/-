@@ -14,7 +14,7 @@
         <div v-for="(row, rowIndex) in grid" :key="rowIndex" class="cell-wrapper">
           <div v-if="cell" class="background-cell" :class="cell.bgColor"></div> <!-- Background cell -->
           <div v-for="(cell, cellIndex) in row" :key="cellIndex" :class="['cell', cell.bgColor]" @click="setCursorPosition(rowIndex, cellIndex)">
-            {{ cell.value }}
+            <div class="char">{{ cell.value }}</div>
           </div>
           
         </div>
@@ -237,20 +237,27 @@
 }
   </script>
   
-  <style scoped>
+  <style scoped lang="scss">
+
+  @import '@/assets/scss/styles.scss';
+
  
   .cell {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    text-align: center;
-    margin: 2px;
-    font: 700 26.1538461538px "Poppins", sans-serif;
-    background-image: linear-gradient(130deg, #3e3661 0%, #595d5f 85%, rgb(109, 109, 109) 100%);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-    color: #fff;
-    border-radius: 2px;
-    border: 3px solid #171717;
+    background: #202e38;
+		padding: 10px 15px;
+		width: calc(100% - 30px);
+		height: calc(100% - 20px);
+		transition: inherit;
+  }
+
+  .char {
+    font: 700 34px/1.3 "Poppins", sans-serif;
+		margin: 0.3em 0 0;
+		transition: 0.8s ease 600ms;
+  }
+
+  .grid-container {
+    --word-length: calc(string-length(this.word.length));
   }
 
   .green {
@@ -265,28 +272,18 @@
     background-image: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(255,0,10,1) 0%, rgba(171,103,47,1) 0%, rgba(42,36,36,1) 100%);
   }
 
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); /* Adjust cell size as needed */
-    gap: 15px; /* Gap between cells */
-    direction: rtl; /* Set direction to right-to-left */
-    margin: 0 auto; /* Center horizontally */
-    max-width: 260px; /* Optional: Set a max-width for the grid */
-  }
 
   .cell-wrapper {
     position: relative; /* Relative position for absolute positioning of cells */
   }
 
   .background-cell {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    position: relative;
+    padding: 4px;
     z-index: 1;
     cursor: default;
     transition: all 0.3s ease;
+    background: linear-gradient(to bottom right, #f3f9a6 0%, #cbc634 100%);
   }
 
   .background-cell .cell {
@@ -296,6 +293,24 @@
     height: calc(100% - 20px);
     transition: inherit;
   }
+
+  .background-cell:hover {
+    transform: scale(1.12);
+    z-index: 10;
+  }
+  .background-cell:hover .cell {
+    background: transparent;
+  } 
+
+  .background-cell:hover .char{
+	 -webkit-text-fill-color: #222;
+  }
+  .background-cell:hover:after {
+    top: 105%;
+	  opacity: 1;
+  }
+  
+
 
 
   </style>
