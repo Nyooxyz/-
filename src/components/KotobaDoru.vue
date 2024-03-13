@@ -11,16 +11,24 @@
     <!-- Display game content here -->
     <div v-if="!gameOver">
       <div class="grid-container">
-        <div v-for="(row, rowIndex) in grid" :key="rowIndex" class="cell-wrapper">
-          <div v-if="cell" class="background-cell" :class="cell.bgColor"></div> <!-- Background cell -->
-          <div v-for="(cell, cellIndex) in row" :key="cellIndex" :class="['cell', cell.bgColor]" @click="setCursorPosition(rowIndex, cellIndex)">
-            <div class="char">{{ cell.value }}</div>
+        <div v-for="(row, rowIndex) in grid" :key="rowIndex" class="row-container">
+          <div v-for="(cell, cellIndex) in row" :key="cellIndex" :class="['cell', cell.bgColor]">
+            <div v-if="cell" class="cell-inner" :class="cell.bgColor"> 
+              <div :class="['char', cell.bgColor]">{{ cell.value }}</div> 
+            </div>
           </div>
-          
         </div>
       </div>
+
+    <div class="legend-table">
+      <div class="legend-table__wrapper">
+        <span class="legend-table__marker green">正</span><span class="legend-table__text">Right character</span>
+        <span class="legend-table__marker red">不</span><span class="legend-table__text">Wrong character</span>
+        <span class="legend-table__marker orange">近</span><span class="legend-table__text">Character is at the wrong spot</span>
+      </div>
+    </div>
     
-      <input v-model="userInput" @input="handleInput" @keydown.backspace="eraseInput" @keyup.enter="checkGuess" ref="inputField" maxlength="5" placeholder="Type your guess" autofocus :disabled="gameOver">
+      <input v-model="userInput" @input="handleInput" @keydown.backspace="eraseInput" @keyup.enter="checkGuess" ref="inputField" maxlength="5" :disabled="gameOver" v-show="autofocus" class="plsHide" autofocus>
       <p v-if="result">{{ result }}</p>
     </div>
     <div v-else>
@@ -53,6 +61,7 @@
         inputBuffer: "",
         colorArr: [],
         gameOver: false,
+        autofocus: true,
         countdownTimer: ""
       };
     },
@@ -65,10 +74,14 @@
         for (let i = 0; i < 5; i++) {
           let row = [];
           for (let j = 0; j < this.word.length; j++) {
-            row.push({ value: "", bgColor: "" });
+            row.push({ value: "", bgColor: "def" });
           }
           this.grid.push(row);
         }
+      },
+      handleInputBlur() {
+        // Refocus the input field if it loses focus
+        this.$refs.inputField.focus();
       },
       handleInput(event) {
 
@@ -127,10 +140,6 @@
           // Clear the input field after updating the grid
           this.userInput = "";
         }
-      },
-      setCursorPosition(row, col) {
-        this.cursor.row = row;
-        this.cursor.col = col;
       },
       eraseInput(event){
         if (!(event.target.value)){
@@ -235,80 +244,17 @@
     }
   }
 }
+
+/* eslint-disable */
   </script>
   
   <style scoped lang="scss">
 
   @import '@/assets/scss/styles.scss';
 
- 
-  .cell {
-    background: #202e38;
-		padding: 10px 15px;
-		width: calc(100% - 30px);
-		height: calc(100% - 20px);
-		transition: inherit;
-  }
-
-  .char {
-    font: 700 34px/1.3 "Poppins", sans-serif;
-		margin: 0.3em 0 0;
-		transition: 0.8s ease 600ms;
-  }
-
-  .grid-container {
-    --word-length: calc(string-length(this.word.length));
-  }
-
-  .green {
-    background-image: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(255,0,10,1) 0%, rgba(36,167,55,1) 0%, rgba(33,33,33,1) 100%);
-  }
-
-  .red {
-    background-image: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(255,0,10,1) 0%, rgba(167,36,36,1) 0%, rgba(33,33,33,1) 100%);
-  }
-
-  .orange {
-    background-image: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(255,0,10,1) 0%, rgba(171,103,47,1) 0%, rgba(42,36,36,1) 100%);
-  }
 
 
-  .cell-wrapper {
-    position: relative; /* Relative position for absolute positioning of cells */
-  }
 
-  .background-cell {
-    position: relative;
-    padding: 4px;
-    z-index: 1;
-    cursor: default;
-    transition: all 0.3s ease;
-    background: linear-gradient(to bottom right, #f3f9a6 0%, #cbc634 100%);
-  }
-
-  .background-cell .cell {
-    background: #202e38;
-    padding: 10px 15px;
-    width: calc(100% - 30px);
-    height: calc(100% - 20px);
-    transition: inherit;
-  }
-
-  .background-cell:hover {
-    transform: scale(1.12);
-    z-index: 10;
-  }
-  .background-cell:hover .cell {
-    background: transparent;
-  } 
-
-  .background-cell:hover .char{
-	 -webkit-text-fill-color: #222;
-  }
-  .background-cell:hover:after {
-    top: 105%;
-	  opacity: 1;
-  }
   
 
 

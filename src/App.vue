@@ -17,6 +17,7 @@ export default {
 }
 
 body {
-  background-color: rgba(0, 0, 0, 0.92);
+  background: #202e38;
+  font-family: "Poppins", sans-serif;
 }
 </style>
