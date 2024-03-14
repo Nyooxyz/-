@@ -8,6 +8,35 @@
 	-webkit-text-fill-color: transparent;
 }
 
+@font-face {
+	font-family: "yasashisa";
+	src: url("../assets/fonts/YasashisaGothicBold-V2.otf");
+}
+
+@font-face {
+	font-family: "zero";
+	src: url("../assets/fonts/ZeroGothic.otf");
+}
+
+@font-face {
+	font-family: "CNT";
+	src: url("../assets/fonts/Square.ttf");
+}
+
+@keyframes shake {
+	0% { transform: translate(1px, 1px) rotate(0deg); }
+	10% { transform: translate(-1px, -2px) rotate(-1deg); }
+	20% { transform: translate(-3px, 0px) rotate(1deg); }
+	30% { transform: translate(3px, 2px) rotate(0deg); }
+	40% { transform: translate(1px, -1px) rotate(1deg); }
+	50% { transform: translate(-1px, 2px) rotate(-1deg); }
+	60% { transform: translate(-3px, 1px) rotate(0deg); }
+	70% { transform: translate(3px, 1px) rotate(-1deg); }
+	80% { transform: translate(-1px, -1px) rotate(1deg); }
+	90% { transform: translate(1px, 2px) rotate(0deg); }
+	100% { transform: translate(1px, -2px) rotate(-1deg); }
+  }
+
 .red {
 	@include background-gradient(#ff616d,#ffc171);
 	.char {
@@ -19,6 +48,7 @@
 	@include background-gradient(#58ac30,#a7df62);
 	.char {
 		@include text-gradient(#58ac30,#a7df62);
+		font-family: "yasashisa";
 	}
 }
 
@@ -26,6 +56,7 @@
 	@include background-gradient(#f3f9a6,#cbc634);
 	.char {
 		@include text-gradient(#f3f9a6,#cbc634);
+		font-family: "yasashisa";
 	}
 }
 
@@ -106,3 +137,41 @@
 	}
 	
 }
+
+.theField {
+	font-size: 3.45em;
+	width: calc(100% - 2px);
+	background-color: #000;
+	border: 1px solid rgb(255, 255, 255);
+	color: rgb(255, 255, 255);
+	letter-spacing: 6px;
+	text-align: center;
+	outline: none;
+  
+  &:focus {
+	transition: 0.3s;
+	box-shadow: inset 0px 8px 64px rgba(255, 255, 255, 0.4); 
+   
+  }
+}
+
+.shake-no {
+	animation: shake 0.2s linear infinite;
+	color: #F00 !important;
+	
+}
+
+#countdown {
+	font-family: CNT;
+	position: fixed;
+	text-align: center;
+	top: 20vh;
+	width: 100vw;
+	font-size: 6em;
+	margin: 0;
+	color: #fff;
+	text-shadow: 0px 1vh rgba(133, 88, 111, 0.2), 0px 1vh 5vh rgb(133, 88, 111 / 20%);
+	z-index: 1000;
+	mix-blend-mode: lighten; 
+}
+

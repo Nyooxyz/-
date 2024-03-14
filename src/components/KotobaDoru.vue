@@ -11,7 +11,7 @@
     <!-- Display game content here -->
     <div v-if="!gameOver">
       <div class="grid-container">
-        <div v-for="(row, rowIndex) in grid" :key="rowIndex" class="row-container">
+        <div v-for="(row, rowIndex) in grid" :key="rowIndex" class="row-container" :class="{ 'shake-no': 揺れる(rowIndex) }">
           <div v-for="(cell, cellIndex) in row" :key="cellIndex" :class="['cell', cell.bgColor]">
             <div v-if="cell" class="cell-inner" :class="cell.bgColor"> 
               <div :class="['char', cell.bgColor]">{{ cell.value }}</div> 
@@ -28,7 +28,7 @@
       </div>
     </div>
     
-      <input v-model="userInput" @input="handleInput" @keydown.backspace="eraseInput" @keyup.enter="checkGuess" ref="inputField" maxlength="5" :disabled="gameOver" v-show="autofocus" class="plsHide" autofocus>
+      <input v-model="userInput" @input="handleInput" @keydown.backspace="eraseInput" @keyup.enter="checkGuess" ref="inputField" maxlength="5" :disabled="gameOver" class="theField" autofocus>
       <p v-if="result">{{ result }}</p>
     </div>
     <div v-else>
@@ -40,7 +40,8 @@
             <div v-for="(color, colorIndex) in colorRow" :key="colorIndex" :class="['color-box', color]"></div>
           </div>
         </div>
-        <p>次の言葉 (CET): {{ countdownTimer }}</p>
+        <p>次の言葉</p>
+        <div id="countdown">{{ countdownTimer }}</div>
       </div>
     </div>
         <!-- Add any additional content or styling for the end game window here -->
@@ -62,7 +63,8 @@
         colorArr: [],
         gameOver: false,
         autofocus: true,
-        countdownTimer: ""
+        countdownTimer: "",
+        指数: null // shakey
       };
     },
     mounted() {
@@ -167,6 +169,12 @@
       checkGuess() {
         const guess = this.grid[this.cursor.row].map(cell => cell.value).join('');
 
+        if(guess.length != this.word.length){
+          this.result = 'Word too short!'
+          this.wrongInputAnim(this.cursor.row)
+          return
+        }
+
          // Initialize arrays to hold correctness, correct indices, and orange characters
         let correctness = [];
         let orangeBuff = [];
@@ -241,7 +249,19 @@
           clearInterval(this.countdownInterval);
         }
       }, 1000);
+    },
+    // -- Answers Animations -- //
+    wrongInputAnim(index) {
+      this.指数 = index
+      console.log(this.指数)
+      setTimeout(() => {
+        this.指数 = null;
+      }, 300);
+    },
+    揺れる(index){
+      return index === this.指数;
     }
+    
   }
 }
 
