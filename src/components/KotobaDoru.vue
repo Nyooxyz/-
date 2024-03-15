@@ -2,7 +2,7 @@
     <!-- Display game content here -->
     <div v-if="!gameOver" class="ui-container">
       <div class="grid-container">
-        <div v-for="(row, rowIndex) in grid" :key="rowIndex" class="row-container" :class="{ 'shake-no': 揺れる(rowIndex) }">
+        <div v-for="(row, rowIndex) in grid" :key="rowIndex" class="row-container" :class="{ 'shake-no': 揺れる(rowIndex) }"> <!-- TODO add class here to toggle kana hints-->
           <div v-for="(cell, cellIndex) in row" :key="cellIndex" :class="['cell', cell.bgColor]">
             <div v-if="cell" class="cell-inner" :class="cell.bgColor"> 
               <div :class="['char', cell.bgColor]">{{ cell.value }}</div> 
@@ -18,8 +18,18 @@
         <span class="legend-table__marker orange">近</span><span class="legend-table__text">Character is at the wrong spot</span>
       </div>
     </div>
-    
-      <input v-model="userInput" @input="handleInput" @keydown.backspace="eraseInput" @keyup.enter="checkGuess" ref="inputField" maxlength="5" :disabled="gameOver" class="theField" autofocus>
+    <div class="hints">
+      <span v-if="!K暗示" id="hints__kanj__hidden" @click="toggleKanji">
+        Show kanji
+      </span>
+      <span v-else id="hints__kanj">
+        {{ 漢字 }}
+      </span>
+      <span id="hints__kana" @click="toggleHintKana">
+        {{ Kな暗示 }}
+      </span>
+    </div>
+    <input v-model="userInput" @input="handleInput" @keydown.backspace="eraseInput" @keyup.enter="checkGuess" ref="inputField" maxlength="5" :disabled="gameOver" class="theField" autofocus>
       
     </div>
     <div v-else>
@@ -57,20 +67,22 @@
     name: "KotobaDoru",
     data() {
       return {
-        言葉: "",
-        漢字: "",
-        gloss: "",
-        grid: [],
-        cursor: { row: 0, col: 0 },
-        userInput: "",
-        inputBuffer: "",
-        colorArr: [],
-        gameOver: false,
-        correct: null,
-        hit: 0,
-        autofocus: true,
-        countdownTimer: "",
-        指数: null // shakey
+        言葉: "", // Word (kana)
+        漢字: "", // Word (kanji)
+        gloss: "", // Word english translation
+        grid: [], // Grid matrice
+        cursor: { row: 0, col: 0 }, // Current position inside grid
+        userInput: "", // Input inside field
+        inputBuffer: "", // buff for input
+        colorArr: [], // Guess row result to color arr
+        gameOver: false, // Game is over
+        correct: null, // User found word
+        hit: 0, // Enter key hit
+        autofocus: true, // On input field
+        countdownTimer: "", // Next word countdown (CET)
+        指数: null, // shakey
+        K暗示: false, // Kanji hint toggle
+        Kな暗示: 0 // Kana hint count
       };
     },
     mounted() {
@@ -216,6 +228,17 @@
           }
         }
       },
+      toggleKanji(){
+        if (this.cursor.row > 1){
+          this.K暗示 = true
+        }
+      },
+      toggleHintKana() {
+        if (this.Kな暗示) {
+          this.Kな暗示--
+          this.cursor.row 
+        }
+      },
       checkGuess() {
         const guess = this.grid[this.cursor.row].map(cell => cell.value).join('');
 
@@ -333,7 +356,7 @@
     // -- Answers Animations -- //
     wrongInputAnim(index) {
       this.指数 = index
-      console.log(this.指数)
+      
       setTimeout(() => {
         this.指数 = null;
       }, 300);
