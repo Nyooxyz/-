@@ -1,15 +1,6 @@
 <template>
-  <title>言葉ドル</title>
-  <header>
-    <h1>
-      言葉ドル
-    </h1>
-
-
-
-  </header>
     <!-- Display game content here -->
-    <div v-if="!gameOver">
+    <div v-if="!gameOver" class="ui-container">
       <div class="grid-container">
         <div v-for="(row, rowIndex) in grid" :key="rowIndex" class="row-container" :class="{ 'shake-no': 揺れる(rowIndex) }">
           <div v-for="(cell, cellIndex) in row" :key="cellIndex" :class="['cell', cell.bgColor]">
@@ -29,19 +20,30 @@
     </div>
     
       <input v-model="userInput" @input="handleInput" @keydown.backspace="eraseInput" @keyup.enter="checkGuess" ref="inputField" maxlength="5" :disabled="gameOver" class="theField" autofocus>
-      <p v-if="result">{{ result }}</p>
+      
     </div>
     <div v-else>
-      <div>
-        <p>{{ word }}</p>
+      <div class="card-container">
+        
+          <p>{{ 言葉 }}</p>
+          <p>{{ 漢字 }}</p>
+          <p>{{ gloss }}</p>
+        
+
+        <hr style="border-top: 1px solid white;">
+
         <p>{{ colorArr.length }} 回</p>
         <div class="color-box-container">
-          <div v-for="(colorRow, index) in colorArr" :key="index" class="color-row">
-            <div v-for="(color, colorIndex) in colorRow" :key="colorIndex" :class="['color-box', color]"></div>
+          <div v-for="(colorRow, index) in colorArr" :key="index" class="colorGrid">
+            <div v-for="(color, colorIndex) in colorRow" :key="colorIndex" :class="['colorGrid-inner', color]"></div>
           </div>
         </div>
+
+         <hr style="border-top: 1px solid white;">
+
         <p>次の言葉</p>
         <div id="countdown">{{ countdownTimer }}</div>
+
       </div>
     </div>
         <!-- Add any additional content or styling for the end game window here -->
@@ -49,41 +51,70 @@
   
   <script>
   import * as wanakana from 'wanakana';
+  import JMdict from '@/../public/jmdict-eng-common-3.5.0.json';
 
   export default {
     name: "KotobaDoru",
     data() {
       return {
-        word: "だいじょうぶ",
+        言葉: "",
+        漢字: "",
+        gloss: "",
         grid: [],
-        result: "",
         cursor: { row: 0, col: 0 },
         userInput: "",
         inputBuffer: "",
         colorArr: [],
         gameOver: false,
+        correct: null,
+        hit: 0,
         autofocus: true,
         countdownTimer: "",
         指数: null // shakey
       };
     },
     mounted() {
+      this.init言葉();
       this.initializeGrid();
       this.startCountdown();
     },
     methods: {
+      init言葉() {
+         // Select entries with non-empty "text" field inside "kanji" or empty "kanji" if "text" is absent
+        let randomEntry = JMdict.words[Math.floor(Math.random() * JMdict.words.length)];
+
+        // 🚫 NO 🚫 カタカナ 🚫 NO 🚫 SHORTIES 🚫
+        while (wanakana.isKatakana(randomEntry.kana[0].text) || randomEntry.kana[0].text.length <= 3 || randomEntry.kana[0].text.length > 6){
+          randomEntry = JMdict.words[Math.floor(Math.random() * JMdict.words.length)];
+        }
+
+        const kanaContent = randomEntry.kana[0].text;
+        const glossContent = randomEntry.sense[0].gloss.map(gloss => gloss.text).join(', ');
+
+        // Check if no 😔 漢字 😔 before extracting content
+        let kanjiContent = '';
+        if (randomEntry.kanji.length > 0) {
+          kanjiContent = randomEntry.kanji.map(kanji => kanji.text).join(' or ');
+        }
+
+        // 👍👍👍
+        console.log('kana: ', kanaContent);
+        console.log('gloss: ', glossContent);
+        console.log('kanji: ', kanjiContent);
+
+        this.言葉 = kanaContent
+        this.gloss = glossContent
+        this.漢字 = kanjiContent
+
+      },
       initializeGrid() {
         for (let i = 0; i < 5; i++) {
           let row = [];
-          for (let j = 0; j < this.word.length; j++) {
+          for (let j = 0; j < this.言葉.length; j++) {
             row.push({ value: "", bgColor: "def" });
           }
           this.grid.push(row);
         }
-      },
-      handleInputBlur() {
-        // Refocus the input field if it loses focus
-        this.$refs.inputField.focus();
       },
       handleInput(event) {
 
@@ -114,6 +145,25 @@
 
         this.handleFinal()
       },
+      checkWordExist(word) {
+        const startTime = new Date();
+
+        for (const wordEntry of JMdict.words) {
+          if (wordEntry.kana[0].text === word){
+            const endTime = new Date();
+            const elapsedTime = endTime - startTime; // Time in milliseconds
+
+            console.log(`Search completed in ${elapsedTime} milliseconds.`);
+            return true
+          }
+        }
+
+        const endTime = new Date();
+        const elapsedTime = endTime - startTime; // Time in milliseconds
+
+        console.log(`Search completed in ${elapsedTime} milliseconds.`);
+        return false
+      },
       handleFinal(){
       // Check if the last character of lastInput is hiragana
         if (wanakana.isHiragana(this.inputBuffer.slice(-1))) {
@@ -127,12 +177,12 @@
           }
 
           this.grid[this.cursor.row][this.cursor.col].value = this.inputBuffer[0];
-          if (this.cursor.col < this.word.length - 1) { // Move the cursor to the next cell
+          if (this.cursor.col < this.言葉.length - 1) { // Move the cursor to the next cell
             this.cursor.col++;
 
             if(this.inputBuffer.length == 2){ // e.g  "じょ"
               this.grid[this.cursor.row][this.cursor.col].value = this.inputBuffer[1];
-              if (this.cursor.col < this.word.length - 1) { // Move the cursor to the next cell
+              if (this.cursor.col < this.言葉.length - 1) { // Move the cursor to the next cell
                 this.cursor.col++;
               }
             }
@@ -148,7 +198,7 @@
           switch(this.cursor.col){
             case 0:
               break
-            case this.word.length - 1:
+            case this.言葉.length - 1:
               if (this.grid[this.cursor.row][this.cursor.col].value){
                   this.grid[this.cursor.row][this.cursor.col].value = '';
                   break
@@ -169,8 +219,38 @@
       checkGuess() {
         const guess = this.grid[this.cursor.row].map(cell => cell.value).join('');
 
-        if(guess.length != this.word.length){
-          this.result = 'Word too short!'
+        if(guess.length != this.言葉.length || !this.checkWordExist(guess)){
+          this.hit++
+          switch(this.hit){
+            case 50:
+              alert("you dont know a lot of words do you...")
+              break
+            case 100:
+              alert("you can pick up a dictionary at this point I think It might be better")
+              break
+            case 150:
+              alert("now you're just doing it on purpose to see what the next prompt is gonna be")
+              break
+            case 300:
+              alert("come on faster")
+              break
+            case 500:
+              alert("half a thousand congrats")
+              break
+            case 1000:
+              alert("how are you able to read this while spamming enter")
+              break
+            case 1500: 
+              alert("you are just reading this through the source there's no way you hit that enter key this much")
+              break
+            case 5000:
+              alert("are you ok")
+              break
+            case 10000:
+              alert("please stop")
+              break
+          }
+      
           this.wrongInputAnim(this.cursor.row)
           return
         }
@@ -181,7 +261,7 @@
 
         // Check each character in the guess against the corresponding character in the word
         for (let i = 0; i < guess.length; i++) {
-          if (guess[i] === this.word[i]) {
+          if (guess[i] === this.言葉[i]) {
             correctness.push("green");
 
           } else {
@@ -190,10 +270,10 @@
 
             if (orangeBuff.length > 1) {
               for (let j = 0; j < orangeBuff.length; j++){
-                if (this.word[i] == guess[orangeBuff[j]]) { // If the current correct character was the one stocked in the buff 
+                if (this.言葉[i] == guess[orangeBuff[j]]) { // If the current correct character was the one stocked in the buff 
                   correctness[orangeBuff[j]] = "orange"; // update the previous character to orange
 
-                  if (this.word[orangeBuff[j]] == guess[i]) { // and if the current wrong char and the previous wrong char needs to be swapped
+                  if (this.言葉[orangeBuff[j]] == guess[i]) { // and if the current wrong char and the previous wrong char needs to be swapped
                     correctness[i] = "orange"; // update this one orange aswell 
                   }
                   orangeBuff.splice(j, 1);
@@ -214,16 +294,16 @@
         this.colorArr.push(correctness)
 
         if (allCorrect) {
-          this.result = "Congratulations! You've guessed the word!";
+          this.correct = true;
           this.gameOver = true;
         
         } else {
           if (this.cursor.row < this.grid.length - 1) {
-            this.result = "Incorrect guess. Try again.";
             this.cursor.row++;
             this.cursor.col = 0;
           } else {
-            this.result = "Incorrect guess. Game over";
+            this.correct = false;
+            this.gameOver = true;
           }
         }
       },
