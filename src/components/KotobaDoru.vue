@@ -2,8 +2,8 @@
     <!-- Display game content here -->
     <div v-if="!gameOver" class="ui-container">
       <div class="grid-container">
-        <div v-for="(row, rowIndex) in grid" :key="rowIndex" class="row-container" :class="{ 'shake-no': 揺れる(rowIndex) }"> <!-- TODO add class here to toggle kana hints-->
-          <div v-for="(cell, cellIndex) in row" :key="cellIndex" :class="['cell', cell.bgColor]">
+        <div v-for="(row, rowIndex) in grid" :key="rowIndex" class="row-container" :class="{ 'shake-no': 揺れる(rowIndex), 'show-row':Kな暗示Toggle(rowIndex) }"> 
+          <div v-for="(cell, cellIndex) in row" :key="cellIndex" :class="['cell', cell.bgColor]" @click="kanaHint(rowIndex, cellIndex)">
             <div v-if="cell" class="cell-inner" :class="cell.bgColor"> 
               <div :class="['char', cell.bgColor]">{{ cell.value }}</div> 
             </div>
@@ -19,14 +19,14 @@
       </div>
     </div>
     <div class="hints">
-      <span v-if="!K暗示" id="hints__kanj__hidden" @click="toggleKanji">
+      <span v-if="!K暗示" id="hints__kanj__hidden" @click="cursor.row === 0 ? toggleKanji() : null" :class="{ 'spawn': cursor.row === 0 }">
         Show kanji
       </span>
       <span v-else id="hints__kanj">
-        {{ 漢字 }}
+        {{ 漢字no送 }}
       </span>
       <span id="hints__kana" @click="toggleHintKana">
-        {{ Kな暗示 }}
+        Kana hints: {{ Kな暗示 }}
       </span>
     </div>
     <input v-model="userInput" @input="handleInput" @keydown.backspace="eraseInput" @keyup.enter="checkGuess" ref="inputField" maxlength="5" :disabled="gameOver" class="theField" autofocus>
@@ -59,16 +59,50 @@
         <!-- Add any additional content or styling for the end game window here -->
   </template>
   
+  
+
   <script>
+  // ! TODO ! //
+
+  /* 
+  
+
+    - FINISH KANJI HINT 
+  
+    - STYLE THE HINTS and SHOW-ROW
+
+    - CODE THE HEADER AND OPT. THE FOOTER
+
+    - CONNECT FOOTER AND HEADER
+
+    - STYLE ANIMS FOR REVEALING CHARACTERS
+
+    - MAKE STYLE RESPONSIVE
+
+    - MAP INIT TO DAILY TIMER : 00:00:00
+
+    - REFRACTOR 
+
+    - REMOVE DEBUG LOGS
+  
+  
+  */
+
   import * as wanakana from 'wanakana';
-  import JMdict from '@/../public/jmdict-eng-common-3.5.0.json';
+  import JMdict from '@/../public/jmdict-eng-common-3.5.0.json'; // 15.2MB
+  import DataService from '@/../services/DataService.js';
 
   export default {
     name: "KotobaDoru",
     data() {
       return {
+        isEepy: false, // loading the dic
+        辞書: null, // big dic
+        始: 0,
+        最後: 100, // initial chonk size
         言葉: "", // Word (kana)
         漢字: "", // Word (kanji)
+        漢字no送: "", // Word (kanji) without okurigana
         gloss: "", // Word english translation
         grid: [], // Grid matrice
         cursor: { row: 0, col: 0 }, // Current position inside grid
@@ -82,16 +116,35 @@
         countdownTimer: "", // Next word countdown (CET)
         指数: null, // shakey
         K暗示: false, // Kanji hint toggle
-        Kな暗示: 0 // Kana hint count
+        Kな暗示: 0, // Kana hint count
+        CanKな暗示: false,
+        RowKな暗示: null // Kana hint row
       };
     },
     mounted() {
+      this.loadDic();      
       this.init言葉();
       this.initializeGrid();
       this.startCountdown();
     },
     methods: {
+      async loadDic() {
+        try {
+          this.isEepy = true;
+          // Load the big chonky boi
+          this.辞書 = await DataService.loadJsonDataLazy('/jmdict-all.json', this.始, this.最後);
+          this.isLoading = false;
+          console.log("big chonk loaded");
+        } catch (error) {
+          console.error('x_x : ', error);
+          this.isLoading = false;
+        }
+      },
       init言葉() {
+
+        const startTime = new Date();
+
+    
          // Select entries with non-empty "text" field inside "kanji" or empty "kanji" if "text" is absent
         let randomEntry = JMdict.words[Math.floor(Math.random() * JMdict.words.length)];
 
@@ -106,7 +159,7 @@
         // Check if no 😔 漢字 😔 before extracting content
         let kanjiContent = '';
         if (randomEntry.kanji.length > 0) {
-          kanjiContent = randomEntry.kanji.map(kanji => kanji.text).join(' or ');
+          kanjiContent = randomEntry.kanji[0].text
         }
 
         // 👍👍👍
@@ -117,6 +170,12 @@
         this.言葉 = kanaContent
         this.gloss = glossContent
         this.漢字 = kanjiContent
+        this.漢字no送 = wanakana.stripOkurigana(kanjiContent)
+
+        const endTime = new Date();
+        const elapsedTime = endTime - startTime; // Time in milliseconds
+
+        console.log(`Init done in ${elapsedTime} milliseconds.`);
 
       },
       initializeGrid() {
@@ -160,7 +219,7 @@
       checkWordExist(word) {
         const startTime = new Date();
 
-        for (const wordEntry of JMdict.words) {
+        for (const wordEntry of this.辞書.words) {
           if (wordEntry.kana[0].text === word){
             const endTime = new Date();
             const elapsedTime = endTime - startTime; // Time in milliseconds
@@ -229,14 +288,14 @@
         }
       },
       toggleKanji(){
-        if (this.cursor.row > 1){
           this.K暗示 = true
-        }
+
       },
       toggleHintKana() {
         if (this.Kな暗示) {
           this.Kな暗示--
-          this.cursor.row 
+          this.RowKな暗示 = this.cursor.row
+          this.CanKな暗示 = true
         }
       },
       checkGuess() {
@@ -324,6 +383,10 @@
           if (this.cursor.row < this.grid.length - 1) {
             this.cursor.row++;
             this.cursor.col = 0;
+
+            if (this.cursor.row === 2){  // Get kana hint on 3rd try
+              this.Kな暗示++
+            } 
           } else {
             this.correct = false;
             this.gameOver = true;
@@ -363,6 +426,21 @@
     },
     揺れる(index){
       return index === this.指数;
+    },
+    Kな暗示Toggle(index){
+      return index === this.RowKな暗示
+    },
+    kanaHint(rowIndex, cellIndex) {
+
+      if(this.CanKな暗示){
+
+        if(rowIndex === this.cursor.row){
+          this.grid[rowIndex][cellIndex].value = this.言葉[cellIndex];
+          this.grid[rowIndex][cellIndex].bgColor = "green";
+          this.RowKな暗示 = null
+          this.CanKな暗示 = false
+        }
+      }
     }
     
   }
