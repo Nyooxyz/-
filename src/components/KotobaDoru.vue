@@ -19,14 +19,14 @@
       </div>
     </div>
     <div class="hints">
-      <span v-if="!K暗示" id="hints__kanj__hidden" @click="cursor.row === 0 ? toggleKanji() : null" :class="{ 'spawn': cursor.row === 0 }">
+      <span v-if="K暗示" id="hints__kanj__hidden" @click="toggleKanji()">
         Show kanji
       </span>
-      <span v-else id="hints__kanj">
+      <span v-if="K暗示tog" id="hints__kanj">
         {{ 漢字no送 }}
       </span>
-      <span id="hints__kana" @click="toggleHintKana">
-        Kana hints: {{ Kな暗示 }}
+      <span v-if="Kな暗示" id="hints__kana" @click="toggleHintKana">
+        Kana hint
       </span>
     </div>
     <input v-model="userInput" @input="handleInput" @keydown.backspace="eraseInput" @keyup.enter="checkGuess" ref="inputField" maxlength="5" :disabled="gameOver" class="theField" autofocus>
@@ -58,7 +58,7 @@
     </div>
 
     <div v-if="isEepy" class="loader">loading...</div> 
-        <!-- Add any additional content or styling for the end game window here -->
+     
   </template>
   
   
@@ -67,9 +67,6 @@
   // ! TODO ! //
 
   /* 
-  
-
-    - FINISH KANJI HINT 
   
     - STYLE THE HINTS and SHOW-ROW
 
@@ -117,7 +114,8 @@
         autofocus: true, // On input field
         countdownTimer: "", // Next word countdown (CET)
         指数: null, // shakey
-        K暗示: false, // Kanji hint toggle
+        K暗示: false, // Kanji hint show
+        K暗示tog: false, // Kanji hint toggle
         Kな暗示: 0, // Kana hint count
         CanKな暗示: false,
         RowKな暗示: null // Kana hint row
@@ -290,7 +288,8 @@
         }
       },
       toggleKanji(){
-          this.K暗示 = true
+          this.K暗示 = false
+          this.K暗示tog = true
 
       },
       toggleHintKana() {
@@ -386,9 +385,18 @@
             this.cursor.row++;
             this.cursor.col = 0;
 
-            if (this.cursor.row === 2){  // Get kana hint on 3rd try
-              this.Kな暗示++
-            } 
+            switch(this.cursor.row){
+              case 2:
+                this.K暗示 = true
+                break
+              case 3: 
+                this.Kな暗示++
+                break
+              default:
+                break
+            }
+
+    
           } else {
             this.correct = false;
             this.gameOver = true;

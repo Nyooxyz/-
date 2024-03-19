@@ -201,8 +201,59 @@
 }
 
 .hints {
-	color:white;
+	display: flex;
+	gap: 50px;
+	justify-content: center;
+
 }
+
+#hints__kanj__hidden {
+	border: 2px solid;
+	line-height: 1;
+	color: #ef6eae;
+
+	&:hover,
+	&:focus {
+		animation: pulse 1s;
+ 	 	box-shadow: 0 0 0 2em transparent;
+	}
+}
+
+#hints__kanj {
+	color:#00eeff;
+	font-size: 1.5em;
+}
+
+#hints__kana {
+	border: 2px solid;
+	line-height: 1;
+	color: #e4cb58;
+
+	&:hover,
+	&:focus {
+		box-shadow: 0 0.5em 0.5em -0.4em white;
+		transform: translateY(-0.25em);
+	}
+}
+
+#hints__kana,
+#hints__kanj__hidden {
+	transition: 0.25s;
+	cursor: pointer;
+	margin-bottom: 20px;
+	padding: 5px;
+
+	&:hover,
+  	&:focus { 
+    color: white;
+
+  }
+}
+
+@keyframes pulse {
+	0% { box-shadow: 0 0 0 0 #ef6eae; }
+  }
+  
 
 .spawn {
 	cursor: pointer;
