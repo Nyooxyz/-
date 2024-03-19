@@ -56,6 +56,8 @@
 
       </div>
     </div>
+
+    <div v-if="isEepy" class="loader">loading...</div> 
         <!-- Add any additional content or styling for the end game window here -->
   </template>
   
@@ -110,7 +112,7 @@
         inputBuffer: "", // buff for input
         colorArr: [], // Guess row result to color arr
         gameOver: false, // Game is over
-        correct: null, // User found word
+        correct: null, // User found word 💮
         hit: 0, // Enter key hit
         autofocus: true, // On input field
         countdownTimer: "", // Next word countdown (CET)
@@ -133,11 +135,11 @@
           this.isEepy = true;
           // Load the big chonky boi
           this.辞書 = await DataService.loadJsonDataLazy('/jmdict-all.json', this.始, this.最後);
-          this.isLoading = false;
+          this.isEepy = false;
           console.log("big chonk loaded");
         } catch (error) {
           console.error('x_x : ', error);
-          this.isLoading = false;
+          this.isEepy = false;
         }
       },
       init言葉() {

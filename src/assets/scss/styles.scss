@@ -208,3 +208,25 @@
 	cursor: pointer;
 	
 }
+
+/* HTML: <div class="loader"></div> */
+.loader {
+	display: inline-grid;
+	color: white;
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	z-index: 2222;
+	font-size: 25px;
+  }
+  .loader:before,
+  .loader:after {
+	content: "⛩";
+	grid-area: 1/1;
+  }
+  .loader:after {
+	animation: l10 1s infinite;
+  }
+  @keyframes l10 {
+	to {transform:scale(1.8);opacity:0}
+  }
