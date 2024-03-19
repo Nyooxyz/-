@@ -3,8 +3,8 @@
     <div v-if="!gameOver" class="ui-container">
       <div class="grid-container">
         <div v-for="(row, rowIndex) in grid" :key="rowIndex" class="row-container" :class="{ 'shake-no': 揺れる(rowIndex), 'show-row':Kな暗示Toggle(rowIndex) }"> 
-          <div v-for="(cell, cellIndex) in row" :key="cellIndex" :class="['cell', cell.bgColor]" @click="kanaHint(rowIndex, cellIndex)">
-            <div v-if="cell" class="cell-inner" :class="cell.bgColor"> 
+          <div v-for="(cell, cellIndex) in row" :key="cellIndex" :class="['cell', cell.bgColor, { 'flip': cell.flip }]" @click="kanaHint(rowIndex, cellIndex)">
+            <div v-if="cell" class="cell-inner" :class="[cell.bgColor]"> 
               <div :class="['char', cell.bgColor]">{{ cell.value }}</div> 
             </div>
           </div>
@@ -67,14 +67,11 @@
   // ! TODO ! //
 
   /* 
-  
-    - STYLE THE HINTS and SHOW-ROW
+
 
     - CODE THE HEADER AND OPT. THE FOOTER
 
     - CONNECT FOOTER AND HEADER
-
-    - STYLE ANIMS FOR REVEALING CHARACTERS
 
     - MAKE STYLE RESPONSIVE
 
@@ -368,7 +365,13 @@
 
         // Update the bgColor property in the grid based on correctness
         this.grid[this.cursor.row].forEach((cell, index) => {
-          cell.bgColor = correctness[index];
+
+          setTimeout(() => {
+            cell.flip = true
+            
+            cell.bgColor = correctness[index]
+          }, 500 * index)
+
         });
 
         // Check if all characters in the guess are correct
@@ -396,8 +399,10 @@
                 break
             }
 
+
     
           } else {
+            this.flipAnim(this.cursor.row)
             this.correct = false;
             this.gameOver = true;
           }
@@ -431,11 +436,11 @@
       this.指数 = index
       
       setTimeout(() => {
-        this.指数 = null;
+        this.指数 = null
       }, 300);
     },
     揺れる(index){
-      return index === this.指数;
+      return index === this.指数
     },
     Kな暗示Toggle(index){
       return index === this.RowKな暗示

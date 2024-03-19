@@ -44,6 +44,8 @@
 	}
 }
 
+
+
 .green {
 	@include background-gradient(#58ac30,#a7df62);
 	.char {
@@ -254,13 +256,17 @@
 	0% { box-shadow: 0 0 0 0 #ef6eae; }
   }
   
-
-.spawn {
-	cursor: pointer;
-	
+.flip {
+	animation: weee 0.5s ease-in-out;
 }
 
-/* HTML: <div class="loader"></div> */
+@keyframes weee {
+  0% { transform: rotateY(180deg); }
+  100% { transform: rotateY(360deg); }
+  
+}
+
+
 .loader {
 	display: inline-grid;
 	color: white;
@@ -281,3 +287,14 @@
   @keyframes l10 {
 	to {transform:scale(1.8);opacity:0}
   }
+
+
+.show-row {
+	.cell-inner{
+		cursor: pointer;
+		@include background-gradient(#c896fe, #eb7b9c);
+		.char {
+			@include text-gradient(#c896fe, #eb7b9c);
+		}
+	}
+}
