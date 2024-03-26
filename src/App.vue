@@ -1,12 +1,22 @@
 <template>
   <div id="app">
+	<Header />
     <router-view></router-view>
+	<Footer />
   </div>
 </template>
 
 <script>
+
+import Footer from './components/AppFooter.vue';
+import Header from './components/AppHeader.vue';
+
 export default {
   name: 'App',
+  components: {
+	Header,
+	Footer
+  }
 }
 </script>
 
@@ -16,12 +26,18 @@ html {
 	background-color: #000;
 	min-height: 100%;
 	/* font-family: "Paragraph", sans-serif; */
-	width: 100vw;
+	max-width: 100%;
 	overflow-x: hidden;
 }
 
+html::-webkit-scrollbar {
+    width: 0.5em;
+}
+
+
+
 #app {
-  min-height: 70vh;
+  min-height: 100%;
   text-align: center;
 }
 
@@ -48,9 +64,6 @@ html {
 
 }
 
-#app::-webkit-scrollbar {
-    width: 1em;
-}
 
 /* Scanlines */
 

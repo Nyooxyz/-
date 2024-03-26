@@ -40,7 +40,7 @@
           <p>{{ gloss }}</p>
         
 
-        <hr style="border-top: 1px solid white;">
+        <hr style="border-top: 1px solid #37cfdc;">
 
         <p>{{ colorArr.length }} 回</p>
         <div class="color-box-container">
@@ -49,7 +49,7 @@
           </div>
         </div>
 
-         <hr style="border-top: 1px solid white;">
+         <hr style="border-top: 1px solid #37cfdc;">
 
         <p>次の言葉</p>
         <div id="countdown">{{ countdownTimer }}</div>
@@ -67,11 +67,6 @@
   // ! TODO ! //
 
   /* 
-
-
-    - CODE THE HEADER AND OPT. THE FOOTER
-
-    - CONNECT FOOTER AND HEADER
 
     - MAKE STYLE RESPONSIVE
 
@@ -94,8 +89,6 @@
       return {
         isEepy: false, // loading the dic
         辞書: null, // big dic
-        始: 0,
-        最後: 100, // initial chonk size
         言葉: "", // Word (kana)
         漢字: "", // Word (kanji)
         漢字no送: "", // Word (kanji) without okurigana
@@ -107,7 +100,6 @@
         colorArr: [], // Guess row result to color arr
         gameOver: false, // Game is over
         correct: null, // User found word 💮
-        hit: 0, // Enter key hit
         autofocus: true, // On input field
         countdownTimer: "", // Next word countdown (CET)
         指数: null, // shakey
@@ -129,19 +121,15 @@
         try {
           this.isEepy = true;
           // Load the big chonky boi
-          this.辞書 = await DataService.loadJsonDataLazy('/jmdict-all.json', this.始, this.最後);
+          this.辞書 = await DataService.loadJsonDataLazy('/jmdict-all.json', 0, 100);
           this.isEepy = false;
-          console.log("big chonk loaded");
+
         } catch (error) {
-          console.error('x_x : ', error);
+
           this.isEepy = false;
         }
       },
       init言葉() {
-
-        const startTime = new Date();
-
-    
          // Select entries with non-empty "text" field inside "kanji" or empty "kanji" if "text" is absent
         let randomEntry = JMdict.words[Math.floor(Math.random() * JMdict.words.length)];
 
@@ -157,22 +145,15 @@
         let kanjiContent = '';
         if (randomEntry.kanji.length > 0) {
           kanjiContent = randomEntry.kanji[0].text
+        } else {
+          kanjiContent = "No kanji 🤔"
         }
-
-        // 👍👍👍
-        console.log('kana: ', kanaContent);
-        console.log('gloss: ', glossContent);
-        console.log('kanji: ', kanjiContent);
 
         this.言葉 = kanaContent
         this.gloss = glossContent
         this.漢字 = kanjiContent
         this.漢字no送 = wanakana.stripOkurigana(kanjiContent)
 
-        const endTime = new Date();
-        const elapsedTime = endTime - startTime; // Time in milliseconds
-
-        console.log(`Init done in ${elapsedTime} milliseconds.`);
 
       },
       initializeGrid() {
@@ -214,22 +195,11 @@
         this.handleFinal()
       },
       checkWordExist(word) {
-        const startTime = new Date();
-
         for (const wordEntry of this.辞書.words) {
           if (wordEntry.kana[0].text === word){
-            const endTime = new Date();
-            const elapsedTime = endTime - startTime; // Time in milliseconds
-
-            console.log(`Search completed in ${elapsedTime} milliseconds.`);
             return true
           }
         }
-
-        const endTime = new Date();
-        const elapsedTime = endTime - startTime; // Time in milliseconds
-
-        console.log(`Search completed in ${elapsedTime} milliseconds.`);
         return false
       },
       handleFinal(){
@@ -300,37 +270,6 @@
         const guess = this.grid[this.cursor.row].map(cell => cell.value).join('');
 
         if(guess.length != this.言葉.length || !this.checkWordExist(guess)){
-          this.hit++
-          switch(this.hit){
-            case 50:
-              alert("you dont know a lot of words do you...")
-              break
-            case 100:
-              alert("you can pick up a dictionary at this point I think It might be better")
-              break
-            case 150:
-              alert("now you're just doing it on purpose to see what the next prompt is gonna be")
-              break
-            case 300:
-              alert("come on faster")
-              break
-            case 500:
-              alert("half a thousand congrats")
-              break
-            case 1000:
-              alert("how are you able to read this while spamming enter")
-              break
-            case 1500: 
-              alert("you are just reading this through the source there's no way you hit that enter key this much")
-              break
-            case 5000:
-              alert("are you ok")
-              break
-            case 10000:
-              alert("please stop")
-              break
-          }
-      
           this.wrongInputAnim(this.cursor.row)
           return
         }
@@ -397,12 +336,9 @@
                 break
               default:
                 break
-            }
-
-
-    
+            }    
           } else {
-            this.flipAnim(this.cursor.row)
+            
             this.correct = false;
             this.gameOver = true;
           }
@@ -467,13 +403,6 @@
   <style scoped lang="scss">
 
   @import '@/assets/scss/styles.scss';
-
-
-
-
-  
-
-
 
   </style>
   
