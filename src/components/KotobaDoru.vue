@@ -1,5 +1,4 @@
 <template>
-    <!-- Display game content here -->
     <div v-if="!gameOver" class="ui-container">
       <div class="grid-container">
         <div v-for="(row, rowIndex) in grid" :key="rowIndex" class="row-container" :class="{ 'shake-no': 揺れる(rowIndex), 'show-row':Kな暗示Toggle(rowIndex) }"> 
@@ -67,12 +66,6 @@
   // ! TODO ! //
 
   /* 
-
-    - MAKE STYLE RESPONSIVE
-
-    - MAP INIT TO DAILY TIMER : 00:00:00
-
-    - REFRACTOR 
 
     - REMOVE DEBUG LOGS
   
@@ -148,6 +141,8 @@
         } else {
           kanjiContent = "No kanji 🤔"
         }
+
+        console.log(this.countdownTimer)
 
         this.言葉 = kanaContent
         this.gloss = glossContent
@@ -345,27 +340,29 @@
         }
       },
       startCountdown() {
-      const now = new Date();
-      const endOfDay = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate() + 1,
-        0, 0, 0 // Set time to midnight
-      );
-      const timeUntilNextDay = endOfDay.getTime() - now.getTime();
+        const now = new Date();
+        const endOfDay = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate() + 1,
+          0, 0, 0 // Set time to midnight
+        );
+        const timeUntilNextDay = endOfDay.getTime() - now.getTime();
 
-      this.countdownInterval = setInterval(() => {
-        const remainingTime = timeUntilNextDay - Date.now() + now.getTime();
-        if (remainingTime > 0) {
-          const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
-          this.countdownTimer = `${hours}時 ${minutes}分 ${seconds}時`;
-        } else {
-          this.countdownTimer = "00h 00m 00s";
-          clearInterval(this.countdownInterval);
-        }
-      }, 1000);
+        this.countdownInterval = setInterval(() => {
+          const remainingTime = timeUntilNextDay - Date.now() + now.getTime();
+          if (remainingTime > 0) {
+            const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+            this.countdownTimer = `${hours}時 ${minutes}分 ${seconds}時`;
+          } else {
+            this.countdownTimer = "00時 00分 00時";
+            this.init言葉();                                                                            // New word at midnight 
+            clearInterval(this.countdownInterval);
+          }
+        }, 1000)
+
     },
     // -- Answers Animations -- //
     wrongInputAnim(index) {

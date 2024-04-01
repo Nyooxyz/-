@@ -1,21 +1,19 @@
 <template>
   <div id="app">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<Header />
     <router-view></router-view>
-	<Footer />
   </div>
 </template>
 
 <script>
 
-import Footer from './components/AppFooter.vue';
 import Header from './components/AppHeader.vue';
 
 export default {
   name: 'App',
   components: {
-	Header,
-	Footer
+	Header
   }
 }
 </script>
@@ -28,17 +26,17 @@ html {
 	/* font-family: "Paragraph", sans-serif; */
 	max-width: 100%;
 	overflow-x: hidden;
+	
 }
 
 html::-webkit-scrollbar {
     width: 0.5em;
 }
 
-
-
 #app {
   min-height: 100%;
   text-align: center;
+  background: linear-gradient(135deg, hsl(230, 40%, 12%), hsl(230, 20%, 7%));
 }
 
 #app::before {
@@ -59,7 +57,6 @@ html::-webkit-scrollbar {
 	top: 0;
 	width: 16px;
 	height: 100%;
-	background: linear-gradient(to left, rgba(0,0,0,1) 0%,rgba(0,0,0,0) 100%);
 	z-index: 1000;
 
 }
@@ -81,7 +78,7 @@ html:not(.no-scanlines):not(.force-no-scanlines) #app::before {
 	z-index: 10000000;
 	animation: ScanlineAnimationLeft 2s linear infinite;
 	pointer-events: none;
-	opacity: 0.5;
+	opacity: 0.4;
 }
 
 html:not(.no-scanlines):not(.force-no-scanlines) #app::after {
@@ -98,7 +95,7 @@ html:not(.no-scanlines):not(.force-no-scanlines) #app::after {
 	z-index: 10000000;
 	animation: ScanlineAnimationRight 0.4s linear infinite;
 	pointer-events: none;
-	opacity: 0.5;
+	opacity: 0.4;
 }
 
 @keyframes ScanlineAnimationLeft {
