@@ -105,7 +105,6 @@
     },
     mounted() {
       this.loadDic();      
-      this.init言葉();
       this.initializeGrid();
       this.startCountdown();
     },
