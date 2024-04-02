@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'; // Import from 'vue-router'
 
 // Import your components
-import KotobaDoru from './components/KotobaDoru.vue';
+import 語ドル from './components/語ドル.vue';
 import Header from './components/AppHeader.vue';
 
 
 const routes = [
   { path: '/', components: {
-    default: KotobaDoru,
+    default: 語ドル,
     header: Header
    },
   }

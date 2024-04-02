@@ -1,4 +1,4 @@
-# yomu
+# 語ドル
 
 ## Project setup
 ```
