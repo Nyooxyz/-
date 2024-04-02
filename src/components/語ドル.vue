@@ -396,9 +396,3 @@
 /* eslint-disable */
   </script>
   
-  <style scoped lang="scss">
-
-  @import '@/assets/scss/styles.scss';
-
-  </style>
-  
