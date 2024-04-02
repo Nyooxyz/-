@@ -76,7 +76,7 @@
   import JMdict from '@/../public/jmdict-eng-common-3.5.0.json'; // 15.2MB
   import DataService from '@/../services/DataService.js';
 
-  export default {
+ . export default {
     name: "KotobaDoru",
     data() {
       return {
