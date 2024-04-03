@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'; // Import from 'vue-router'
 
 // Import your components
-import 語ドル from './components/語ドル.vue';
+import Godle from './components/GodleApp.vue';
 import Header from './components/AppHeader.vue';
 
 
 const routes = [
   { path: '/', components: {
-    default: 語ドル,
+    default: Godle,
     header: Header
    },
   }
