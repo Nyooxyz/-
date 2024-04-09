@@ -26,6 +26,7 @@ html {
 	/* font-family: "Paragraph", sans-serif; */
 	max-width: 100%;
 	overflow-x: hidden;
+  overflow-y: hidden;
 	
 }
 
@@ -35,8 +36,7 @@ html::-webkit-scrollbar {
 
 #app {
   min-height: 100%;
-  text-align: center;
-  background: linear-gradient(135deg, hsl(230, 40%, 12%), hsl(230, 20%, 7%));
+  background: #000;
 }
 
 #app::before {

@@ -1,59 +1,23 @@
 <template>
-    <div class="hd">
-      <h1><span style="color: hsla(40, 100%, 50%, 1);">語</span><span style="color: hsla(200, 100%, 60%, 1);">ドル</span></h1>
+
+  <div class="jellyfish">
+    <div id="title">
+      <span style="color: #c4a747;">KANJI</span> <span style="color: #bbb9c3;">GALAXY</span>
     </div>
+    <div class="settings-panel">
+
+    </div>
+
+    <div class="main">
+      
+    </div>
+  </div>
+ 
 </template>
 
 
 <style>
 
-@keyframes lights {
-  0% {
-    color: hsl(230, 40%, 80%);
-    text-shadow:
-      0 0 1em hsla(320, 100%, 50%, 0.2),
-      0 0 0.125em hsla(320, 100%, 60%, 0.3),
-      -1em -0.125em 0.5em hsla(40, 100%, 60%, 0),
-      1em 0.125em 0.5em hsla(200, 100%, 60%, 0);
-  }
-  
-  30% { 
-    color: hsl(230, 80%, 90%);
-    text-shadow:
-      0 0 1em hsla(320, 100%, 50%, 0.5),
-      0 0 0.125em hsla(320, 100%, 60%, 0.5),
-      -0.5em -0.125em 0.25em hsla(40, 100%, 60%, 0.2),
-      0.5em 0.125em 0.25em hsla(200, 100%, 60%, 0.4);
-  }
-  
-  40% { 
-    color: hsl(230, 100%, 95%);
-    text-shadow:
-      0 0 1em hsla(320, 100%, 50%, 0.5),
-      0 0 0.125em hsla(320, 100%, 90%, 0.5),
-      -0.25em -0.125em 0.125em hsla(40, 100%, 60%, 0.2),
-      0.25em 0.125em 0.125em hsla(200, 100%, 60%, 0.4);
-  }
-  
-  70% {
-    color: hsl(230, 80%, 90%);
-    text-shadow:
-      0 0 1em hsla(320, 100%, 50%, 0.5),
-      0 0 0.125em hsla(320, 100%, 60%, 0.5),
-      0.5em -0.125em 0.25em hsla(40, 100%, 60%, 0.2),
-      -0.5em 0.125em 0.25em hsla(200, 100%, 60%, 0.4);
-  }
-  
-  100% {
-    color: hsl(230, 40%, 80%);
-    text-shadow:
-      0 0 1em hsla(320, 100%, 50%, 0.2),
-      0 0 0.125em hsla(320, 100%, 60%, 0.3),
-      1em -0.125em 0.5em hsla(40, 100%, 60%, 0),
-      -1em 0.125em 0.5em hsla(200, 100%, 60%, 0);
-  }
-  
-}
 
 
 @font-face {
@@ -61,12 +25,41 @@
 	src: url("../assets/fonts/YasashisaGothicBold-V2.otf");
 }
 
-h1 {
-    margin-top: 0;
-    font-size: 4em;
-    font-family: yasashisa;          
-    font-weight: 300;
-    animation: lights 5s 750ms linear infinite;               
+.jellyfish {
+  width: 60%;
+  height: 70%;
+  margin: 0 auto;
+  margin-top: 5%;
+  
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 10% 90%;
+  border: 2px solid yellow;
+
+  
+}
+
+.settings-panel{
+  grid-row: 1;
+  border: 2px solid green;
+
+}
+
+.main {
+  border: 2px solid blue;
+  width: 100%;
+  grid-column: 1 / span 2; 
+  grid-row: 2; 
+}
+
+#title {
+  grid-row: 1; 
+  font-size: 2em;
+  font-family: yasashisa;          
+  font-weight: 300;
+  
+  margin-left: 20%;
 }
 
 </style>
