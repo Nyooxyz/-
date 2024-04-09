@@ -2,7 +2,7 @@
     <div class="hd">
       <h1><span style="color: hsla(40, 100%, 50%, 1);">語</span><span style="color: hsla(200, 100%, 60%, 1);">ドル</span></h1>
     </div>
-  </template>
+</template>
 
 
 <style>

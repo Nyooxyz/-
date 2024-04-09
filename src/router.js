@@ -1,22 +1,20 @@
-import { createRouter, createWebHistory } from 'vue-router'; // Import from 'vue-router'
-
-// Import your components
-import Godle from './components/GodleApp.vue';
-import Header from './components/AppHeader.vue';
+import { createRouter, createWebHistory } from 'vue-router';
 
 
 const routes = [
-  { path: '/', components: {
-    default: Godle,
-    header: Header
-   },
+  {
+    path: '/',
+    component: () => import("@/components/LeHome.vue"),
+  },
+  {
+    path: '/godle',
+    component: () => import("@/components/GodleApp.vue"),
   }
-  // Add more routes as needed
-];
+]
 
 const router = createRouter({
   history: createWebHistory(),
   routes
-});
+})
 
 export default router;
