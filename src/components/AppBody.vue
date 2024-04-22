@@ -1,5 +1,18 @@
 <template>
+    <!--⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣄⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⣷⣶⣦⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠀⠀⠀
+⠀⣿⣿⣿⣿⣿⣿⣧⡀⠤⠤⣤⣤⣀⣀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠠⠀⠀⠀⠀⠀
+⠀⣿⣿⣿⣿⣿⣿⣿⣇⠀⣦⣤⣤⣄⣈⡉⠉⠛⠛⠷⢶⠄⢠⣴⣦⡀⠀⠀⠀⠀
+⠀⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠉⠉⠛⠛⠷⣦⣀⠀⠀⢻νύξ⣿⡀⠀⠀⠀
+⠀⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣹⡆⠀⠀⠈⠉⠘⡇⠀⠀⠀
+⠀⣿⣿⣿⣿⣿⣿⡟⠁⠀⠀⢀⠀⢀⣀⣠⣤⡴⠾⠋⠁⠀⠀⢀⣠⡾⠃⠀⠀⠀
+⠀⣿⣿⣿⣿⣿⣿⠶⠶⠶⠀⠿⠃⠘⠉⠉⠀⠀⢀⣀⣤⣵⠾⠛⠉⠀⠀⠀⠀⠀
+⠀⣿⣿⣟⣉⣀⣀⣀⣀⣠⣤⣤⣤⣴⡶⠶⠿⠛⠛⠉⠁⠄⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠛⠛⠋⠉⠉⠉⠉⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠄⠀⠀⠀⠀
 
+tottemo 39
+-->
   <div class="jellyfish">
     <div class="title">
       <div class="title__text"><span class="kanji">KANJI <span class="漢字">漢字</span></span><span class="galaxy">GALA</span><span class="x">X</span><span class="galaxy">Y</span> <span class="銀河">銀河</span></div>
@@ -7,17 +20,17 @@
     <div class="marquee">
       <div id="colorlay"></div>
       <div>
-        <div>1先学ゃ興前ヲナレコ方希セタレテ間8全め万歩メ首者経さ制化混まぐす騒国ハアサヱ対実樹措もわべド疑山ぽ議行造ド相慶秒記じが</div>
-        <div>絡ケトワ道新ひ意約てぜ者意ニホト柴障じは治必ワヱ痛組ヌサオ特唇んうぎは車張チ学残ナヨツコ本8気のかどべ軍利目やッほ見境30止リトネマ頼奥ぐンづぎ</div>
+        <div>お前に向けて言う、頑張る！生きる！生きるだけでいい！生きるだけでいいのに仕事までしてるなんて偉い！素晴らしい</div>
+        <div>お前に向けて言う、頑張る！生きる！生きるだけでいい！生きるだけでいいのに仕事までしてるなんて偉い！素晴らしい</div>
       </div>
 
       <div>
-        <div>1先学ゃ興前ヲナレコ方希セタレテ間8全め万歩メ首者経さ制化混まぐす騒国ハアサヱ対実樹措もわべド疑山ぽ議行造ド相慶秒記じが</div>
-        <div>絡ケトワ道新ひ意約てぜ者意ニホト柴障じは治必ワヱ痛組ヌサオ特唇んうぎは車張チ学残ナヨツコ本8気のかどべ軍利目やッほ見境30止リトネマ頼奥ぐンづぎ</div>
+        <div>お前に向けて言う、頑張る！生きる！生きるだけでいい！生きるだけでいいのに仕事までしてるなんて偉い！素晴らしい</div>
+        <div>お前に向けて言う、頑張る！生きる！生きるだけでいい！生きるだけでいいのに仕事までしてるなんて偉い！素晴らしい</div>
       </div>
     </div>
     <div class="main">
-    
+      <slot></slot>
 
     </div>
     <div class="foot__left">
@@ -143,7 +156,7 @@
   box-shadow: rgba(255, 255, 255, 0.45) 0px 25px 20px -20px;  
   grid-column: 1 / span 2; 
   grid-row: 2; 
-  mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #000 var(--marquee-fade-edges), #000 calc(100% - var(--marquee-fade-edges)), rgba(0, 0, 0, 0) 100%);
+  mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #000 20%, #000 calc(100% - 20%), rgba(0, 0, 0, 0) 100%);
   overflow: hidden;
   z-index: 20;
   position: relative;
@@ -214,17 +227,11 @@
 }
 
 
-.foot {
-  font-family: bison;
-  color: #ffffffbb;
-  font-size: 1.22vw;  
-  position: relative;
-  z-index: 22; 
-}
-
 .foot__left, .foot__right {
   color: #ffffffbb;
   z-index: 22; 
+  display: inline-flex;
+  gap: 1vw;
   opacity: 0.2;
   transition: 1s opacity ease-out;
 }
@@ -255,19 +262,15 @@
 }
 
 .svg-container {
-  height: 2.5vh;
-  width: 2.5vw;
+  height: 3.5vh;
+  width: 3.5vw;
   position: relative;
 }
 
-.svg-container a{
+.svg-container svg{
   position: absolute;
   width: 100%;
   height: 100%;
-}
-
-.svg-container svg{
-  transform: skew(-30deg);
   fill: #fff;
 }
 

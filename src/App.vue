@@ -1,19 +1,22 @@
 <template>
   <div id="app">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<Header />
-    <router-view></router-view>
+	<Body>
+    <template v-slot:default>
+      <router-view></router-view>
+    </template>
+  </Body>
   </div>
 </template>
 
 <script>
 
-import Header from '@/components/AppHeader.vue';
+import Body from '@/components/AppBody.vue';
 
 export default {
   name: 'App',
   components: {
-	Header
+	Body
   }
 }
 </script>
